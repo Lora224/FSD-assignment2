@@ -26,5 +26,5 @@ class Database:
         with open(self.path, "r") as file:
             return file.readlines()
     def clear(self):
-        with open(self.path, "w") as file:
-            pass
+        open(self.path, "w")
+           
