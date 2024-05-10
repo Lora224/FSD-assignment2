@@ -14,7 +14,6 @@ class AdminController:
     def show_student(self,student):
         #student.show()
         student = self.db.get_student()
-        #### get student =???
         for student in self.student:
             print(f"Student ID: {self.studentID()}, Name: {self.studentName()}.")
 
