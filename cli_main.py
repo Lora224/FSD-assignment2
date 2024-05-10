@@ -5,7 +5,7 @@
 # admin system
 
 
-#import re
+#import 
 
 def display_university_menu():
     print("The University System")
