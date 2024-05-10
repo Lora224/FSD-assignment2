@@ -28,7 +28,7 @@ class SubjectController:
     def getSubjectData(self):
         return self.db.read(self.db)
     
-    def printSubjectData(self):
+    def showSubjectData(self):
         print(f'Subject ID:: {self.subject_id} -- Mark = : {self.mark} -- Grade =  {self.grade}')
         
     def removeSubject(self,subjectId):
