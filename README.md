@@ -18,3 +18,19 @@ The Faculty GUI program is composed of 2 scripts:
 -   controller.py (to be combined from multiple files later)
 -   view scripts 
 
+
+Temporary Issue update May 16 4:00 AM
+Dev note
+
+- database - 
+figure out csv index problem & how to nest subject data
+
+
+- subject - 
+figure out how to calculate avg mark from subject data
+
+- student - 
+login validator
+
+- admin -
+removestudent not sure

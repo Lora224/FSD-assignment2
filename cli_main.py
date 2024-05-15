@@ -76,6 +76,8 @@ def handle_student_course_choice(choice):
     if choice == 'C':
         print("Changing password...")
         # Add code to change student's password
+       # student.new_password = input("Enter new password: ")
+       # student.updatePassword(student.new_password)
     elif choice == 'E':
         print("Enrolling in subject...")
         # Add code to enroll student in a subject

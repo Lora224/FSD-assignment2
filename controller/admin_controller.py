@@ -19,7 +19,7 @@ class AdminController:
 
     def remove_student(self,studentID):
         #student.remove()
-        studentID = self.db.get_studentID()
+        studentID = self.db.get_student()
         for studentID in self.studentID:
             if studentID.get_studentID() == studentID:
                 studentID.remove(studentID)
