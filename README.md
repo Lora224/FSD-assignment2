@@ -19,7 +19,7 @@ The Faculty GUI program is composed of 2 scripts:
 -   view scripts 
 
 
-Temporary Issue update May 16 18:04 PM
+Temporary Issue update May 16 19:10 PM
 
 Dev note
 
@@ -28,10 +28,8 @@ all working now
 
 
 - studentcontroller - 
-all tested except update password
+all working now
 
-just need to remeber to add the function writing back to csv
-& decide what form to use with csv 'subjects' part
 
 - student - 
 all working

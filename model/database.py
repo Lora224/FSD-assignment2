@@ -64,22 +64,32 @@ class Database:
         student = df.loc[df['studentID'] == studentID].copy()
         student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
         return student
-    def update_student(self,email,newPassword):
+    def update_student_password(self,email,newPassword):
         df = pd.read_csv(self.path)
         df.loc[df['email'] == email, 'password'] = newPassword
+        df.to_csv(self.path, index=False)     
+    def update_student_subjects(self,email,subjects):
+        df = pd.read_csv(self.path)
+        s =''
+        for subject in subjects:
+            subject_str = f'{subject[0]}:{subject[1]}:{subject[2]}'
+            s = s + subject_str + ';'
+        df.loc[df['email'] == email, 'subjects'] = s
         df.to_csv(self.path, index=False)
 
-# if __name__ == "__main__":
-#   db=Database()
+if __name__ == "__main__":
+  db=Database()
 
-#   #print (df.columns)          #giving double output?
+  #print (df.columns)          #giving double output?
 #   print('get student by email') #working
 #   student = db.get_student_by_email('janedoe@university.com')
 #   print(f'Student ID :: {student['studentID'].values[0]} -- Name: {student['name'].values[0]} ')
 #   for subject in student['parsed_subjects'].values[0]:
 #      print(f'Subject ID: {subject[0]} -- Mark: {subject[1]} -- Grade: {subject[2]}')
 
-
+  subjects = [['111', 85, 'HD'], ['222', 75, 'D'], ['333', 0, 'F']]
+  db.update_student_subjects('janedoe@university.com',subjects)
+  
 #   print('get student')
 #   print (db.get_student()) #working
 #   id = input('Remove student by ID:') #working

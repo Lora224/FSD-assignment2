@@ -47,9 +47,6 @@ class StudentController:
         #self.write_subject(data)
         self.print_subject(s) 
     
-    #def write_subject(self,subjects,data):          #write stuent ID, subject ID, mark and grade to student.data
-    #    subjects.append(data)
-
     def get_subject(self,student):              #turn subject into a list of objects
         s = []
         for subject in student['parsed_subjects']:
@@ -78,17 +75,20 @@ class StudentController:
         print('cannot find subject')
     
     def update_password (self, email, newPassword,confirmPassword):
+        print(colored('Updating password','yellow'))
         if newPassword != confirmPassword:
-            print(colored('Passwords do not match - try again','red'))
+            print(colored('Password does not match - try again','red'))
             self.update_password(email,newPassword,input('Confirm password: '))
-        student = self.db.get_student(email)
-        if student is None:
+        student = self.db.get_student_by_email(email)
+        if student.empty is True:
             print(colored('Student not found','red')) 
         else:
             if Validator.valid_password(newPassword): #print success message
                #update db with new password
-               self.db.update_student(email,newPassword)
+               self.db.update_student_password(email,newPassword)
                #print(colored('Your password is updated','green'))
+            else:
+                print(colored('Invalid new password','red'))
                
     def calculate_average_mark(self,subjects):
         total_mark = 0
@@ -100,19 +100,28 @@ class StudentController:
 #   sc = StudentController()
 #   subjects =[(321,100,'HD'),(322,75,'D'),(323,65,'C')]
   
-#   while input("Enroll subject? y/n") == "y":
-#       if len(subjects) < 4:
-#           sc.enroll_subject(subjects)
-#           sc.show_subject_data(subjects)
-#       else:
-#           print("Maximum number of subjects reached")
-#           break
-#   sc.remove_subject(input("Enter subject ID to remove: "),subjects)
-#   sc.show_subject_data(subjects)
-#   print(f'Average mark: {sc.calculate_average_mark(subjects)}')
+# #   while input("Enroll subject? y/n") == "y":
+# #       if len(subjects) < 4:
+# #           sc.enroll_subject(subjects)
+# #           sc.show_subject_data(subjects)
+# #       else:
+# #           print("Maximum number of subjects reached")
+# #           break
+# #   sc.remove_subject(input("Enter subject ID to remove: "),subjects)
+# #   sc.show_subject_data(subjects)
+# #   print(f'Average mark: {sc.calculate_average_mark(subjects)}')
   
-  #if input("Remove database? y/n") == "y":
-  #    sc.db.clear()
+# #   if input("Remove database? y/n") == "y":
+# #      sc.db.clear()
+#   db= Database()
+#   student = db.get_student_by_email(input("Enter email: "))
+#   newpwd = input("Enter new password: ")
+#   #print(student)
+#   #print(student['name'].values[0])
+#   sc.update_password(student['email'].values[0],newpwd,newpwd)
+  
+  
+  
   
 
   #Registering, login, choose subject, etc
