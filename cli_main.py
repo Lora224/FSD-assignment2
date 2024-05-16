@@ -5,17 +5,17 @@
 # admin system
 
 
-#import 
+from termcolor import colored
 
 def display_university_menu():
-    print("The University System")
+    print(colored("The University System","light_cyan"))
     print("Please choose an option:")
     print("(A) Admin")
     print("(S) Student")
     print("(X) Exit")
 
 def display_student_menu():
-    print("The Student System")
+    print(colored("The Student System","light_cyan"))
     print("Please choose an option:")
     print("(L) Login")
     print("(R) Register")

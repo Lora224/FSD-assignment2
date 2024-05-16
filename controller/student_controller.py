@@ -3,8 +3,6 @@ import re
 import sys
 import os
 #import csv
-import pandas as pd
-import random as ran
 from termcolor import colored #https://pypi.org/project/termcolor/ requried to install
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from model.subject import Subject

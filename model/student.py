@@ -6,7 +6,6 @@ import random as rd
 import re
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import subject as Subject
 from model.database import Database
 import pandas as pd
 EMAIL_PATTERN= r'\b[A-Za-z]+@university\.com\b'
