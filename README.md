@@ -23,7 +23,7 @@ Temporary Issue update May 16 4:00 AM
 Dev note
 
 - database - 
-figure out csv index problem & how to nest subject data
+all working now
 
 
 - subject - 

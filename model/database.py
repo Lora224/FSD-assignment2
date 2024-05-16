@@ -31,36 +31,56 @@ class Database:
     def clear(self):
         open(self.path, "w")
         
-    #def remove_student(self,studentID):
-    #    df = pd.read_csv(self.path)
-    #    df = df.drop(df[(df['studentID']==studentID)].index)
-    #    df.to_csv(self.path, index=False)
+    def remove_student(self,studentID):
+        df = pd.read_csv(self.path)
+        tmp = df.loc[df['studentID'] == studentID]
+        if tmp.empty:
+            return False
+        df = df.drop(df[(df['studentID']==studentID)].index)
+        df.to_csv(self.path, index=False)
+        return True
         
+    def parse_subjects(self,subject_str):
+        subjects = subject_str.split(';')
+        return [subject.split(':') for subject in subjects]
 
     def get_student(self):
-        df = pd.read_csv(self.file_path)
+        df = pd.read_csv(self.path)
         students = []
         for index, row in df.iterrows():
-            student = Student (row['studentID'],row['name'], row['email'], row['password'], row['subjects'].split(';'))
+            student = [row['studentID'],row['name'], row['email'], row['password'],row['subjects'].split(';')]
             students.append(student)
+        #students.append
+       # students['parsed_subjects'] = students['subjects'].apply(self.parse_subjects)
         return students   
-    def get_student(self,email):
+    
+    def get_student_by_email(self,email):
         df = pd.read_csv(self.path)
-        return df.loc[df['email'] == email]
+        student = df.loc[df['email'] == email].copy()
+        student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
+        return student
+    def get_student_by_id(self,studentID):
+        df = pd.read_csv(self.path)
+        student = df.loc[df['studentID'] == studentID].copy()
+        student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
+        return student
     def update_student(self,email,newPassword):
         df = pd.read_csv(self.path)
         df.loc[df['email'] == email, 'password'] = newPassword
         df.to_csv(self.path, index=False)
 
+if __name__ == "__main__":
+  db=Database()
 
-db=Database()
-df = pd.read_csv(db.path)        #has problem reading the new file
-print (df.columns)
-def parse_subjects(subject_str):
-    subjects = subject_str.split(';')
-    return [subject.split(':') for subject in subjects]
-df['parsed_subjects'] = df['subjects'].apply(parse_subjects)
-print(df[['studentID', 'name', 'email', 'parsed_subjects']])
-print (df.columns)
-#print(db.get_student('johnsmiths@university.com'))
-#print (db.get_student())
+  #print (df.columns)          #giving double output?
+  print('get student by email') #working
+  student = db.get_student_by_email('janedoe@university.com')
+  print(f'Student ID :: {student['studentID'].values[0]} -- Name: {student['name'].values[0]} ')
+  for subject in student['parsed_subjects'].values[0]:
+     print(f'Subject ID: {subject[0]} -- Mark: {subject[1]} -- Grade: {subject[2]}')
+
+
+  print('get student')
+  print (db.get_student()) #working
+  id = input('Remove student by ID:') #working
+  db.remove_student(id)
