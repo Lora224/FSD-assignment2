@@ -1,14 +1,14 @@
 #Student operation controller (combine with subject controller)
 import re
 import sys
+import os
 #import csv
 import pandas as pd
 import random as ran
 from termcolor import colored #https://pypi.org/project/termcolor/ requried to install
-
-sys.path.insert(0, './model')
-from subject import Subject
-from database import Database
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from model.subject import Subject
+from model.database import Database
 #from subject_controller import SubjectController
 #from student import Student
 
@@ -37,28 +37,46 @@ class StudentController:
         #self.studentId = 123456 #example student ID
        
         #print("Subject ID: ",self.subject.subject_id)
-    def enroll_subject(self,s=Subject()):    #enroll subject
-        self.subject_id = s.subject_ID
-        self.mark = s.mark
-        self.grade = s.grade
-        self.writeSubject()
-        self.printSubjectData() 
+    def enroll_subject(self,subjects):    #enroll subject
+        s = Subject(111,0,'')             #create a new subject object
+        s.get_subjectID()
+        s.get_mark()
+        s.grade = s.get_grade()
+        data = [s.subject_ID,s.mark,s.grade] #parsed or not?
+        subjects.append(data)
+        #self.write_subject(data)
+        self.print_subject(s) 
     
-    def write_subject(self,data):          #write stuent ID, subject ID, mark and grade to student.data
-  
-        self.db.write(data) 
+    #def write_subject(self,subjects,data):          #write stuent ID, subject ID, mark and grade to student.data
+    #    subjects.append(data)
 
-    def get_subject(self):                 #read subject data from student.data
-        return self.db.read(self.db)
+    def get_subject(self,student):              #turn subject into a list of objects
+        s = []
+        for subject in student['parsed_subjects']:
+           s.append(Subject(subject[0],subject[1],subject[2]))
+        return s
     
-    def print_subject(self):               #print newly enrolled subject data
-        print(f'Subject ID:: {self.subject_id} -- Mark = : {self.mark} -- Grade =  {self.grade}')
-        
-    def remove_subject(self,subjectId):
-        self.db.remove_subject(subjectId)      #remove subject from student.data
-        print("Subject removed")
+    def subject_count(self,subjects):           #count number of subjects enrolled
+        return len(subjects)  
+      
+    def print_subject(self,subject):               #print newly enrolled subject data
+        print(f'Subject ID:: {subject.subject_ID} -- Mark = : {subject.mark} -- Grade =  {subject.grade}')
     
+    def show_subject_data(self,subjects):           #show all subjects enrolled by student 
+        print(colored(f'Showing {len(subjects)} subjects\n','yellow'))
+        for subject in subjects:                    #subject is an object of Subject
+            print(f'Subject ID:: {subject[0]} -- Mark = : {subject[1]} -- Grade =  {subject[2]}')
+           
+    def remove_subject(self,subjectId,subjects):     #remove subject from subjects list
+        for subject in subjects:
+            print(subject[0])
+            if str(subject[0]) == str(subjectId):
+                subjects.remove(subject)
+                print("Subject removed")
+                return
 
+        print('cannot find subject')
+    
     def update_password (self, email, newPassword,confirmPassword):
         if newPassword != confirmPassword:
             print(colored('Passwords do not match - try again','red'))
@@ -72,18 +90,29 @@ class StudentController:
                self.db.update_student(email,newPassword)
                #print(colored('Your password is updated','green'))
                
-    def calculate_average_mark(self):
-        student = self.db.get_student()          #get marks from the subjectlist
+    def calculate_average_mark(self,subjects):
         total_mark = 0
-        for student in student:
-            total_mark += student.mark
-        return total_mark/len(student)       
+        for s in subjects:
+            total_mark += s[1]
+        return total_mark/len(subjects)       
 #test
-sc = StudentController()
-s = Subject()
-sc.enroll_subject(s.subject_id)
-#if input("Remove database? y/n") == "y":
-#    sc.db.clear()
-print(colored('Print test','green')) #test printing color
+# if __name__ == "__main__":
+#   sc = StudentController()
+#   subjects =[(321,100,'HD'),(322,75,'D'),(323,65,'C')]
+  
+#   while input("Enroll subject? y/n") == "y":
+#       if len(subjects) < 4:
+#           sc.enroll_subject(subjects)
+#           sc.show_subject_data(subjects)
+#       else:
+#           print("Maximum number of subjects reached")
+#           break
+#   sc.remove_subject(input("Enter subject ID to remove: "),subjects)
+#   sc.show_subject_data(subjects)
+#   print(f'Average mark: {sc.calculate_average_mark(subjects)}')
+  
+  #if input("Remove database? y/n") == "y":
+  #    sc.db.clear()
+  
 
-#Registering, login, choose subject, etc
+  #Registering, login, choose subject, etc

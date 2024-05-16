@@ -6,11 +6,11 @@
 import random as rd
 class Subject:
         
-    def __init__(self):
+    def __init__(self,subjectID,mark,grade):
        # self.subject_id = self.get_subjectID()
-       self.subject_ID = self.get_subjectID()
-       self.mark = self.get_mark()
-       self.grade = self.get_grade()
+       self.subject_ID = subjectID
+       self.mark = mark
+       self.grade = grade
         
     #return subject id and mark
     def __str__(self):
@@ -32,8 +32,9 @@ class Subject:
         
     def get_subjectID(self):
         randnum = str(rd.randint(1,999))
+        self.subject_ID = randnum.zfill(3)
         #print("subject.py Subject ID: ",randnum.zfill(3))
-        return randnum.zfill(3)
+        return self.subject_ID
 
 
 

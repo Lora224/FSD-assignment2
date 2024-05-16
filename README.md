@@ -19,18 +19,22 @@ The Faculty GUI program is composed of 2 scripts:
 -   view scripts 
 
 
-Temporary Issue update May 16 4:00 AM
+Temporary Issue update May 16 18:04 PM
+
 Dev note
 
 - database - 
 all working now
 
 
-- subject - 
-figure out how to calculate avg mark from subject data
+- studentcontroller - 
+all tested except update password
+
+just need to remeber to add the function writing back to csv
+& decide what form to use with csv 'subjects' part
 
 - student - 
-login validator
+all working
 
 - admin -
 removestudent not sure

@@ -15,20 +15,25 @@ class SubjectController:
         self.path = 'student.csv'
        
         #print("Subject ID: ",self.subject.subject_id)
-    def enrollSubject(self,subjectId,subject=Subject()):
-        self.subject_id = subjectId
-        self.mark = subject.getmark()
-        self.grade = subject.getGrade()
+    def enrollSubject(self):
+        s=Subject()
+        self.subject_id = s.get_subjectID()
+        self.mark = s.get_mark()
+        self.grade = s.get_grade()
         self.writeSubject()
         print(f'Subject ID:: {self.subject_id} -- Mark = : {self.mark} -- Grade =  {self.grade}')
         #self.printSubjectData()
     
-    def writeSubject(self):
+    def writeSubject(self,subjects):
         data = f'{self.studentId},{self.subject_id},{self.mark},{self.grade}\n'
-        self.db.write(data) #write student ID, subject ID, mark and grade to student.data
+        subjects
+        # self.db.write(data) #write student ID, subject ID, mark and grade to student.data
 
-    def get_subject(self,studentID):       #TBD
-        return self.db.read(self.db)
+    def get_subject(self,student):              #turn subject into a list of objects
+        s = []
+        for subject in student['parsed_subjects']:
+           s.append(Subject(subject[0],subject[1],subject[2]))
+        return s
     
     def showSubjectData(self):
         print(colored(f'Showing {self.subject_count()} subjects\n','yellow'))
@@ -43,10 +48,10 @@ class SubjectController:
     def subject_count(self):
         return len(self.get_subject(studentId))    
 #test
-sc = SubjectController()
-s = Subject()
-s.subject_id = 100
-sc.enrollSubject(s.subject_id)
-#if input("Remove database? y/n") == "y":
-#    sc.db.clear()
+if __name__ == "__main__":
+  sc = SubjectController()
+
+  sc.enrollSubject()
+  #if input("Remove database? y/n") == "y":
+  #   sc.db.clear()
 

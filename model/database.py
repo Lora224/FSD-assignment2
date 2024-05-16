@@ -12,7 +12,7 @@
 #subject, student controllers etc intereact with student.data
 import pandas as pd
 import os
-import student as Student
+
 class Database:
     def __init__(self):
         self.path = 'student.csv'
@@ -69,18 +69,18 @@ class Database:
         df.loc[df['email'] == email, 'password'] = newPassword
         df.to_csv(self.path, index=False)
 
-if __name__ == "__main__":
-  db=Database()
+# if __name__ == "__main__":
+#   db=Database()
 
-  #print (df.columns)          #giving double output?
-  print('get student by email') #working
-  student = db.get_student_by_email('janedoe@university.com')
-  print(f'Student ID :: {student['studentID'].values[0]} -- Name: {student['name'].values[0]} ')
-  for subject in student['parsed_subjects'].values[0]:
-     print(f'Subject ID: {subject[0]} -- Mark: {subject[1]} -- Grade: {subject[2]}')
+#   #print (df.columns)          #giving double output?
+#   print('get student by email') #working
+#   student = db.get_student_by_email('janedoe@university.com')
+#   print(f'Student ID :: {student['studentID'].values[0]} -- Name: {student['name'].values[0]} ')
+#   for subject in student['parsed_subjects'].values[0]:
+#      print(f'Subject ID: {subject[0]} -- Mark: {subject[1]} -- Grade: {subject[2]}')
 
 
-  print('get student')
-  print (db.get_student()) #working
-  id = input('Remove student by ID:') #working
-  db.remove_student(id)
+#   print('get student')
+#   print (db.get_student()) #working
+#   id = input('Remove student by ID:') #working
+#   db.remove_student(id)
