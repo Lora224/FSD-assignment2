@@ -59,7 +59,6 @@ class Database:
         student = df.loc[df['email'] == email].copy()
         if student.empty is not True and student['subjects'].values[0] != ' ':
            student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
-           print(student['parsed_subjects'])
         return student
     def get_student_by_id(self,studentID):
         df = pd.read_csv(self.path)
@@ -75,7 +74,10 @@ class Database:
         s =''
         for subject in subjects:
             subject_str = f'{subject[0]}:{subject[1]}:{subject[2]}'
-            s = s + ';'+ subject_str 
+            if s == '':
+                s = subject_str
+            else:
+                s = s + ';'+ subject_str 
         df.loc[df['email'] == email, 'subjects'] = s
         df.to_csv(self.path, index=False)
 
