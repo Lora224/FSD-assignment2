@@ -19,20 +19,15 @@ The Faculty GUI program is composed of 2 scripts:
 -   view scripts 
 
 
-Temporary Issue update May 16 19:10 PM
+Temporary Issue update May 17 20:24 PM
 
 Dev note
-
-- database - 
-all working now
-
-
-- studentcontroller - 
-all working now
+- CLI main - student
+   finished
+- GUI
+   finished
 
 
-- student - 
-all working
+Can do more testing if favored.
 
-- admin -
-removestudent not sure
+
