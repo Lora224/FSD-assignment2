@@ -5,6 +5,7 @@ import sys
 import random as rd
 import re
 import os
+from termcolor import colored
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from model.database import Database
 import pandas as pd
@@ -39,30 +40,38 @@ class Student:
         if Validator.match(email,password):
             #find corresponding student in student.csv
            if not Validator.valid_email(email) or not Validator.valid_password(password): #invalid email or password
+               print(colored('Incorrect email or password format','red'))
                return False 
            df=pd.read_csv(self.path)
-           pwd = df.loc[df['email'] == email,'password'].values[0]
-           if pwd == password:
-               return df.loc[df['email'] == email]           #return student data dataframe
-           else:
+           if df.loc[df['email'] == email].empty:
+               print(colored('Student does not exist','red'))
                return False
+           else:
+               print (colored('email and password formats acceptable','yellow'))
+               pwd = df.loc[df['email'] == email,'password'].values[0]
+               if pwd == password:
+                  return True
+               else:
+                  print(colored('Incorrect password','red'))
+                  return False                         #return student data dataframe
+     
+               
     def register(self,email,password):
-        if self.db.get_student_by_email(email).empty == False:
-            print('Student already exists')
+        s = self.db.get_student_by_email(email)
+        if s.empty == False:
+            print(colored(f'Student {s['name'].values[0]} already exists','red'))
             return False                     # student already exists
         if Validator.valid_email(email) and Validator.valid_password(password):
+            print(colored('email and password formats acceptable','yellow'))
             self.email = email
             self.password = password
-            data = f'{self.ID},{self.name},{self.email},{self.password},{self.subjects}\n'
+            self.name = input("Name: ")
+            data = f'{self.ID},{self.name},{self.email},{self.password}, '
             self.db.write(data)
-            
             return True
         else:
-            print('Invalid Email or Password')
-            return False #invalid email or password
+            return False
     
-    def input_name(self):
-        self.name = input("Name: ")
         
         
 # if __name__ == "__main__":

@@ -40,74 +40,68 @@ class StudentController:
         s.get_subjectID()
         s.get_mark()
         s.grade = s.get_grade()
-        data = [s.subject_ID,s.mark,s.grade] #parsed or not?
+        data = [s.subject_ID,s.mark,s.grade] 
         subjects.append(data)
+        print(colored(f'Enrolling in Subject - {s.subject_ID}',"yellow"))
+        return subjects
         #self.write_subject(data)
-        self.print_subject(s) 
+        
+   
     
-    def get_subject(self,student):              #turn subject into a list of objects
+    def get_subject(self,subjects):             
         s = []
-        for subject in student['parsed_subjects']:
-           s.append(Subject(subject[0],subject[1],subject[2]))
+        for subject in subjects:
+           s.append([subject[0],int(subject[1]),subject[2]])
         return s
     
     def subject_count(self,subjects):           #count number of subjects enrolled
         return len(subjects)  
       
-    def print_subject(self,subject):               #print newly enrolled subject data
-        print(f'Subject ID:: {subject.subject_ID} -- Mark = : {subject.mark} -- Grade =  {subject.grade}')
+    # def print_subject(self,subject):               #print newly enrolled subject data
+    #     print(f'Subject ID:: {subject.subject_ID} -- Mark = : {subject.mark} -- Grade =  {subject.grade}')
     
     def show_subject_data(self,subjects):           #show all subjects enrolled by student 
         print(colored(f'Showing {len(subjects)} subjects\n','yellow'))
         for subject in subjects:                    #subject is an object of Subject
-            print(f'Subject ID:: {subject[0]} -- Mark = : {subject[1]} -- Grade =  {subject[2]}')
+            print(f'[ subject ID::{subject[0]} -- mark =  {subject[1]} -- grade =  {subject[2]} ]')
            
     def remove_subject(self,subjectId,subjects):     #remove subject from subjects list
         for subject in subjects:
-            print(subject[0])
             if str(subject[0]) == str(subjectId):
                 subjects.remove(subject)
-                print("Subject removed")
+                print(colored(f'Dropping Subject-{subjectId}','yellow'))
                 return
 
         print('cannot find subject')
     
     def update_password (self, email, newPassword,confirmPassword):
-        print(colored('Updating password','yellow'))
         if newPassword != confirmPassword:
             print(colored('Password does not match - try again','red'))
             self.update_password(email,newPassword,input('Confirm password: '))
-        student = self.db.get_student_by_email(email)
-        if student.empty is True:
-            print(colored('Student not found','red')) 
-        else:
-            if Validator.valid_password(newPassword): #print success message
+
+
+        if Validator.valid_password(newPassword): #print success message
                #update db with new password
                self.db.update_student_password(email,newPassword)
                #print(colored('Your password is updated','green'))
-            else:
+        else:
                 print(colored('Invalid new password','red'))
                
     def calculate_average_mark(self,subjects):
         total_mark = 0
         for s in subjects:
-            total_mark += s[1]
-        return total_mark/len(subjects)       
+            total_mark += int(s[1])
+        return total_mark/len(subjects) 
+        
 #test
 # if __name__ == "__main__":
 #   sc = StudentController()
-#   subjects =[(321,100,'HD'),(322,75,'D'),(323,65,'C')]
+#   db= Database()
+#   subjects =[[321,'100','HD'],[322,'75','D'],[323,'65','C']]
+#   print(sc.get_subject(subjects))
   
-# #   while input("Enroll subject? y/n") == "y":
-# #       if len(subjects) < 4:
-# #           sc.enroll_subject(subjects)
-# #           sc.show_subject_data(subjects)
-# #       else:
-# #           print("Maximum number of subjects reached")
-# #           break
-# #   sc.remove_subject(input("Enter subject ID to remove: "),subjects)
 # #   sc.show_subject_data(subjects)
-# #   print(f'Average mark: {sc.calculate_average_mark(subjects)}')
+#   print(f'Average mark: {sc.calculate_average_mark(subjects)}')
   
 # #   if input("Remove database? y/n") == "y":
 # #      sc.db.clear()

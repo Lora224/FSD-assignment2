@@ -9,7 +9,7 @@ class Subject:
     def __init__(self,subjectID,mark,grade):
        # self.subject_id = self.get_subjectID()
        self.subject_ID = subjectID
-       self.mark = mark
+       self.mark = int(mark)
        self.grade = grade
         
     #return subject id and mark

@@ -57,7 +57,9 @@ class Database:
     def get_student_by_email(self,email):
         df = pd.read_csv(self.path)
         student = df.loc[df['email'] == email].copy()
-        student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
+        if student.empty is not True and student['subjects'].values[0] != ' ':
+           student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
+           print(student['parsed_subjects'])
         return student
     def get_student_by_id(self,studentID):
         df = pd.read_csv(self.path)
@@ -73,22 +75,23 @@ class Database:
         s =''
         for subject in subjects:
             subject_str = f'{subject[0]}:{subject[1]}:{subject[2]}'
-            s = s + subject_str + ';'
+            s = s + ';'+ subject_str 
         df.loc[df['email'] == email, 'subjects'] = s
         df.to_csv(self.path, index=False)
 
-if __name__ == "__main__":
-  db=Database()
+# if __name__ == "__main__":
+#   db=Database()
 
-  #print (df.columns)          #giving double output?
+#   #print (df.columns)          #giving double output?
 #   print('get student by email') #working
-#   student = db.get_student_by_email('janedoe@university.com')
+#   student = db.get_student_by_email('johnsmiths@university.com')
 #   print(f'Student ID :: {student['studentID'].values[0]} -- Name: {student['name'].values[0]} ')
-#   for subject in student['parsed_subjects'].values[0]:
-#      print(f'Subject ID: {subject[0]} -- Mark: {subject[1]} -- Grade: {subject[2]}')
-
-  subjects = [['111', 85, 'HD'], ['222', 75, 'D'], ['333', 0, 'F']]
-  db.update_student_subjects('janedoe@university.com',subjects)
+# #   for subject in student['parsed_subjects'].values[0]:
+# #      print(f'Subject ID: {subject[0]} -- Mark: {subject[1]} -- Grade: {subject[2]}')
+#   str = "1:90:A;2:80:B;3:70:C"
+#   subjects = db.parse_subjects(str)
+#   print(subjects)
+  
   
 #   print('get student')
 #   print (db.get_student()) #working
