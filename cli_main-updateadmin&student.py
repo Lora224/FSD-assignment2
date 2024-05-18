@@ -12,7 +12,7 @@ from model.subject import Subject
 from model.database import Database
 from model.student import Student
 from controller.student_controller import StudentController as SC
-#from controller.admin_controller import AdminController as AC
+from controller.admin_controller import AdminController as AC
 from termcolor import colored
 
 
