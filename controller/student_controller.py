@@ -87,10 +87,11 @@ class StudentController:
         else:
                 print(colored('Invalid new password','red'))
                
-    def calculate_average_mark(self,subjects):
+    @staticmethod        
+    def calculate_average_mark(subjects):
         total_mark = 0
         for s in subjects:
-            total_mark += int(s[1])
+            total_mark += int(s.split(':')[1])
         return total_mark/len(subjects) 
         
 #test
