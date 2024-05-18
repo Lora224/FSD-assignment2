@@ -107,15 +107,15 @@ def admin_system():
         ac = AC()
         admin_choice = input(colored("Admin System(c/g/p/r/s/x) : ","light_cyan")).upper()
         if admin_choice == 'C':
-            AC.clear_database()   
+            ac.clear_database()   
         elif admin_choice == 'G':
-            AC.group_student()              
+            ac.group_student()              
         elif admin_choice == 'P':
-            AC.partition()
+            ac.partition()
         elif admin_choice == 'R':
-            AC.remove_student()
+            ac.remove_student(int(input('Enter the student ID to remove: ')))
         elif admin_choice == 'S':
-            AC.show_student()                      
+            ac.show_student()                      
         elif admin_choice == 'X':
               break
 def main():
