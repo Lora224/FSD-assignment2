@@ -62,8 +62,8 @@ class AdminController:
                 pass_student.append(student)
             else:
                 fail_student.append(student)
-        print(f"Pass students: {pass_student}")
-        print(f"Fail students: {fail_student}")
+        print(colored(f"Pass students: {pass_student}",'yellow'))
+        print(colored(f"Fail students: {fail_student}",'yellow'))
     
     def group_student(self,student):
         student = self.db.get_student()
@@ -75,11 +75,11 @@ class AdminController:
         for student in student:
             if SC.calculate_average_mark() >= 85:
                 HD_grade.append(student)
-            elif SC.calculate_average_mark() >= 75 & student.calculate_average_mark() < 85 :
+            elif SC.calculate_average_mark() >= 75 & SC.calculate_average_mark() < 85 :
                 D_grade.append(student)
-            elif SC.calculate_average_mark() >= 65 & student.calculate_average_mark() < 75 :
+            elif SC.calculate_average_mark() >= 65 & SC.calculate_average_mark() < 75 :
                 C_grade.append(student)
-            elif SC.calculate_average_mark() >= 50 & student.calculate_average_mark() < 65 :
+            elif SC.calculate_average_mark() >= 50 & SC.calculate_average_mark() < 65 :
                 P_grade.append(student) 
             else:
                 F_grade.append(student)
@@ -94,11 +94,11 @@ class AdminController:
         #         P_grade.append(student) 
         #     else:
         #         F_grade.append(student)
-        # print(f"HD students: {len(HD_grade)}")
-        # print(f"D students: {len(D_grade)}")
-        # print(f"C students: {len(C_grade)}")
-        # print(f"P students: {len(P_grade)}")
-        # print(f"F students: {len(F_grade)}") 
+        print(colored(f"HD students: {len(HD_grade)}",'yellow'))
+        print(colored(f"D students: {len(D_grade)}",'yellow'))
+        print(colored(f"C students: {len(C_grade)}",'yellow'))
+        print(colored(f"P students: {len(P_grade)}",'yellow'))
+        print(colored(f"F students: {len(F_grade)}",'yellow')) 
   
 
     def clear_database(self):
