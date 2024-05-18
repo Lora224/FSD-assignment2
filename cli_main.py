@@ -3,146 +3,137 @@
 # student_system
 # student_course
 # admin system
+import sys
+import os
+import re
 
-
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from model.subject import Subject
+from model.database import Database
+from model.student import Student
+from controller.student_controller import StudentController as SC
+#from controller.admin_controller import AdminController as AC
 from termcolor import colored
 
-def display_university_menu():
-    print(colored("The University System","light_cyan"))
-    print("Please choose an option:")
-    print("(A) Admin")
-    print("(S) Student")
-    print("(X) Exit")
 
-def display_student_menu():
-    print(colored("The Student System","light_cyan"))
-    print("Please choose an option:")
-    print("(L) Login")
-    print("(R) Register")
-    print("(X) Exit")
+EMAIL_PATTERN= r'\b[A-Za-z]+@university\.com\b'
+PASSWORD_PATTERN = r'\b[A-Z][A-Za-z]{5,}[0-9]{3,}\b'
 
-def display_student_course_menu():
-    print("The Student Course System")
-    print("Please choose an option:")
-    print("(C) Change Password")
-    print("(E) Enroll in Subject")
-    print("(R) Remove Subject")
-    print("(S) Show Enrolled Subjects")
-    print("(X) Exit")
 
-def display_admin_menu():
-    print("The Admin System")
-    print("Please choose an option:")
-    print("(C) Clear Database File")
-    print("(G) Group Students")
-    print("(P) Partition Students")
-    print("(R) Remove Student")
-    print("(S) Show Students")
-    print("(X) Exit")
+class Validator:
+    @staticmethod
+    def match(email,password):
+        return email== email and password == password
+    
+    @staticmethod
+    def valid_email(email):
+        return re.search(EMAIL_PATTERN,email)
+    
+    @staticmethod
+    def valid_password(password):
+        return re.fullmatch(PASSWORD_PATTERN,password)
 
-def validate_email(email):
-    # Email pattern validation logic here
-    # Return True if email is valid, False otherwise
-    # You can use regular expressions for email pattern matching
-    email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-    return re.match(email_pattern, email)
+def student_system():
+    while True:
+          db=Database()
+          student = Student()
+          sc = SC()
+          student_choice = input(colored("Student System(l/r/x) : ","light_cyan")).upper()
+          if student_choice == 'L':
+              print(colored("Student Sign In","green"))
+              email = input("Enter email: ")
+              password = input("Enter password: ")
+              if student.login(email,password):
+                subjects =[]
+                s = db.get_student_by_email(email)
+                student.email = s['email'].values[0]
+                student.password = s['password'].values[0]
+                student.name = s['name'].values[0]
+                if s['subjects'].values[0] != ' ':
+                   s['parsed_subjects'] = s['subjects'].apply(db.parse_subjects)
+                   subjects = sc.get_subject(s['parsed_subjects'].values[0])
+                   student.subjects = s['subjects'].values[0]
+                student_course_system(student,subjects)
+          elif student_choice == 'R':
+              print(colored("Student Sign Up","green"))
+              email = input("Enter email: ")
+              password = input("Enter password: ")
+              if student.register(email,password):
+                s = db.get_student_by_email(email)  
+                student.email = email
+                student.password = password
+                student.id = s['studentID'].values[0]
+                student.name = s['name'].values[0]
+                subjects = []
+                student_course_system(student,subjects)
+          elif student_choice == 'X':
+              break
 
-def register_student():
-    email = input("Enter email: ")
-    password = input("Enter password: ")
 
-    if validate_email(email):
-        # Check if student already exists in the database
-        # Add code to check if student already exists in the database
-        # If student does not exist, register the student by storing data in "students.data" file
-        with open("students.data", "a") as file:
-            file.write(f"{email},{password}\n")
-        print("Registration successful!")
-    else:
-        print("Invalid email format. Please try again.")
 
-def login_student():
-    email = input("Enter email: ")
-    password = input("Enter password: ")
 
-    # Check if student exists in the database
-    # Add code to check if student exists in the database
-    # If student exists, login the student and perform actions in the student course menu
-
-    # Simulating login by printing a success message
-    print(f"Login successful! Welcome, {email}.")
-
-def handle_student_course_choice(choice):
-    if choice == 'C':
-        print("Changing password...")
-        # Add code to change student's password
-       # student.new_password = input("Enter new password: ")
-       # student.updatePassword(student.new_password)
-    elif choice == 'E':
-        print("Enrolling in subject...")
-        # Add code to enroll student in a subject
-    elif choice == 'R':
-        print("Removing subject...")
-        # Add code to remove subject from student's enrollment list
-    elif choice == 'S':
-        print("Showing enrolled subjects...")
-        # Add code to show enrolled subjects and grades for the student
-    elif choice == 'X':
-        print("Exiting Student Course System...")
-    else:
-        print("Invalid choice. Please try again.")
-
-def handle_admin_choice(choice):
-    if choice == 'C':
-        print("Clearing database file...")
-        # Add code to clear the "students.data" file
-    elif choice == 'G':
-        print("Grouping students...")
-        # Add code to group students based on grades
-    elif choice == 'P':
-        print("Partitioning students...")
-        # Add code to show pass/fail distribution of students
-    elif choice == 'R':
-        print("Removing student...")
-        # Add code to remove a student from the database
-    elif choice == 'S':
-        print("Showing students...")
-        # Add code to show all students from the database
-    elif choice == 'X':
-        print("Exiting Admin System...")
-    else:
-        print("Invalid choice. Please try again.")
-
+        
+def student_course_system(student,subjects):
+    while True:
+      sc = SC()
+      db = Database()
+      #print(f'[Student: {student.name},Subjects: {student.subjects},Password: {student.password}')
+      student_choice=input(colored("Student Course System(c/e/r/s/x): ","light_cyan")).upper()
+      if student_choice == 'S':
+            sc.show_subject_data(subjects)
+      if student_choice == 'E':
+            if sc.subject_count(subjects)<4:
+                subjects  = sc.enroll_subject(subjects)  
+                print(colored(f'You are now enrolled in {sc.subject_count(subjects)} out of 4 subjects' ))
+            else:
+                print(colored("Students are allowed to enrol in 4 subjects only","red"))
+      if student_choice == 'R':
+            subjectID = input("Remove Subject by ID: ")
+            sc.remove_subject(subjectID,subjects)
+            print(colored(f'You are now enrolled in {sc.subject_count(subjects)} out of 4 subjects' ))
+      if student_choice == 'C':
+            print(colored("Updating Password","yellow"))
+            new_password = input("New password: ")
+            confirm_password = input("Confirm Password: ")
+            sc.update_password(student.email,new_password,confirm_password)
+      elif student_choice == 'X':
+            if(sc.subject_count(subjects)):
+               db.update_student_subjects(student.email,subjects)
+            break
+       
+def admin_system():
+    while True:
+        db=Database()    
+        ac = AC()
+        admin_choice = input(colored("Admin System(c/g/p/r/s/x) : ","light_cyan")).upper()
+        if admin_choice == 'C':
+            AC.clear_database()   
+        elif admin_choice == 'G':
+            AC.group_student()              
+        elif admin_choice == 'P':
+            AC.partition()
+        elif admin_choice == 'R':
+            AC.remove_student()
+        elif admin_choice == 'S':
+            AC.show_student()                      
+        elif admin_choice == 'X':
+              break
 def main():
     while True:
-        display_university_menu()
-        university_choice = input("Enter your choice: ").upper()
+        #display_university_menu()
+        university_choice = input(colored("University System: (A)Admin, (S)tudent, or X : ","light_cyan")).upper()
         
         if university_choice == 'A':
-            display_admin_menu()
-            admin_choice = input("Enter your choice: ").upper()
-            handle_admin_choice(admin_choice)
+            admin_system()
         elif university_choice == 'S':
-            display_student_menu()
-            student_choice = input("Enter your choice: ").upper()
+            #student = Student()
+            student_system()
             
-            if student_choice == 'L':
-                login_student()
-                display_student_course_menu()
-                student_course_choice = input("Enter your choice: ").upper()
-                handle_student_course_choice(student_course_choice)
-            elif student_choice == 'R':
-                register_student()
-            elif student_choice == 'X':
-                print("Exiting Student System...")
-                break
-            else:
-                print("Invalid choice. Please try again.")
         elif university_choice == 'X':
-            print("Exiting University System...")
+            print("Thank You")
             break
         else:
             print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
-    main()
+   main()
