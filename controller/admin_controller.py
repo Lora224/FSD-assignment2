@@ -48,8 +48,8 @@ class AdminController:
                 pass_student.append(f'Student ID: {student[0]}, Name: {student[1]}.')
             else:
                 fail_student.append(f'Student ID: {student[0]}, Name: {student[1]}.')
-        print(colored(f"Pass students: {pass_student}",'yellow'))
-        print(colored(f"Fail students: {fail_student}",'yellow'))
+        print(colored(f"Pass students: {'\n'.join(pass_student)}",'yellow'))
+        print(colored(f"Fail students: {'\n'.join(fail_student)}",'yellow'))
     
     # # OP1
     # def group_student(self):
@@ -71,21 +71,21 @@ class AdminController:
         F_grade = [] 
         for student in students:  
             if SC.calculate_average_mark(student[-1]) >= 85:
-                HD_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+                HD_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
             elif SC.calculate_average_mark(student[-1]) < 85 and SC.calculate_average_mark(student[-1]) >= 75:
-                D_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+                D_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
             elif SC.calculate_average_mark(student[-1]) < 75 and SC.calculate_average_mark(student[-1]) >= 65:
-                C_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+                C_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
             elif SC.calculate_average_mark(student[-1]) < 65 and SC.calculate_average_mark(student[-1]) >= 50:
-                P_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.') 
+                P_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.') 
             else:
-                F_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+                F_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
        
-        print(colored(f"HD students: {HD_grade}",'yellow'))
-        print(colored(f"D students: {D_grade}",'yellow'))
-        print(colored(f"C students: {C_grade}",'yellow'))
-        print(colored(f"P students: {P_grade}",'yellow'))
-        print(colored(f"F students: {F_grade}",'yellow')) 
+        print(colored(f"HD students: {'\n'.join(HD_grade)}",'yellow'))
+        print(colored(f"D students: {'\n'.join(D_grade)}",'yellow'))
+        print(colored(f"C students: {'\n'.join(C_grade)}",'yellow'))
+        print(colored(f"P students: {'\n'.join(P_grade)}",'yellow'))
+        print(colored(f"F students: {'\n'.join(F_grade)}",'yellow')) 
   
 
     def clear_database(self):
