@@ -45,45 +45,47 @@ class AdminController:
         fail_student = []
         for student in students:
             if SC.calculate_average_mark(student[-1]) >= 50:
-                pass_student.append(student)
+                pass_student.append(f'Student ID: {student[0]}, Name: {student[1]}.')
             else:
-                fail_student.append(student)
+                fail_student.append(f'Student ID: {student[0]}, Name: {student[1]}.')
         print(colored(f"Pass students: {pass_student}",'yellow'))
         print(colored(f"Fail students: {fail_student}",'yellow'))
     
-    
+    # # OP1
+    # def group_student(self):
+    #     students = self.db.get_student()
+    #     students.sort(key=lambda student: SC.calculate_average_mark(student[-1]), reverse=True)
+       
+    #     print(colored("Grouping students by grade:", "yellow"))
+    #     for student in students:
+    #         print(colored(f"Student ID: {student[0]}, Name: {student[1]}, Grade: {SC.calculate_average_mark(student[-1])}.", 'yellow'))
+
+    # OP2
+
     def group_student(self):
         students = self.db.get_student()
-        students.sort(key=lambda student: SC.calculate_average_mark(student[-1]), reverse=True)
-
-        print(colored("Grouping students by grade:", "yellow"))
-        for student in students:
-            print(colored(f"Student ID: {student[0]}, Name: {student[1]}, Grade: {SC.calculate_average_mark(student[-1])}.", 'yellow'))
-
-    # def group_student(self):
-    #     student = self.db.get_student()
-    #     HD_grade = []
-    #     D_grade = []
-    #     C_grade = []
-    #     P_grade = []
-    #     F_grade = [] 
-    #     for student in student:
-    #         if SC.calculate_average_mark(student[-1]) >= 85:
-    #             HD_grade.append(student)
-    #         elif SC.calculate_average_mark(student[-1]) >= 75 & SC.calculate_average_mark(student[-1]) < 85 :
-    #             D_grade.append(student)
-    #         elif SC.calculate_average_mark(student[-1]) >= 65 & SC.calculate_average_mark(student[-1]) < 75 :
-    #             C_grade.append(student)
-    #         elif SC.calculate_average_mark(student[-1]) >= 50 & SC.calculate_average_mark(student[-1]) < 65 :
-    #             P_grade.append(student) 
-    #         else:
-    #             F_grade.append(student)
+        HD_grade = []
+        D_grade = []
+        C_grade = []
+        P_grade = []
+        F_grade = [] 
+        for student in students:  
+            if SC.calculate_average_mark(student[-1]) >= 85:
+                HD_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+            elif SC.calculate_average_mark(student[-1]) < 85 and SC.calculate_average_mark(student[-1]) >= 75:
+                D_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+            elif SC.calculate_average_mark(student[-1]) < 75 and SC.calculate_average_mark(student[-1]) >= 65:
+                C_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+            elif SC.calculate_average_mark(student[-1]) < 65 and SC.calculate_average_mark(student[-1]) >= 50:
+                P_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.') 
+            else:
+                F_grade.append(f'Student ID: {student[0]}, Name: {student[1]}.')
        
-    #     print(colored(f"HD students: {len(HD_grade)}",'yellow'))
-    #     print(colored(f"D students: {len(D_grade)}",'yellow'))
-    #     print(colored(f"C students: {len(C_grade)}",'yellow'))
-    #     print(colored(f"P students: {len(P_grade)}",'yellow'))
-    #     print(colored(f"F students: {len(F_grade)}",'yellow')) 
+        print(colored(f"HD students: {HD_grade}",'yellow'))
+        print(colored(f"D students: {D_grade}",'yellow'))
+        print(colored(f"C students: {C_grade}",'yellow'))
+        print(colored(f"P students: {P_grade}",'yellow'))
+        print(colored(f"F students: {F_grade}",'yellow')) 
   
 
     def clear_database(self):
