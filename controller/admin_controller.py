@@ -1,44 +1,69 @@
 #Admin tasks handling controller
 #viewing, grouping, partitioning students, clearing database, remove student
+import re
+import os
+from termcolor import colored 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from model.student import Student
+from model.database import Database
+from model.subject import Subject
+from student_controller import StudentController as SC
 
-from student import Student
-from database import Database
-from subject import Subject
-#from config import DTF,NOW
+# EMAIL_PATTERN = r'\b[A-Za-z]+@university\.com\b'
+# PASSWORD_PATTERN = r'\b[A-Z][A-Za-z]{5,}[0-9]{3,}\b'
 
+# class Validator:
+#     @staticmethod
+#     def valid_email(email):
+#         return re.search(EMAIL_PATTERN, email)
+    
+#     @staticmethod
+#     def valid_password(password):
+#         return re.fullmatch(PASSWORD_PATTERN, password)
 class AdminController:
-    def __init__(self):
-        self.name = "Admin"
+    def __init__(self):        
         self.db = Database()
 
-    def show_student(self,student):
-        #student.show()
-        student = self.db.get_student()
-        for student in self.student:
-            print(f"Student ID: {self.studentID()}, Name: {self.studentName()}.")
+    def show_student(self,students):
+        #Op1: create function show in student module: student.show()
+        # def show(self):
+        #for student in self.student:
+        #   print(f"Student ID: {self.studentID()}, Name: {self.studentName()}.")
+        #op2: 
+        students = self.db.get_student()
+        studentID = self.db.get_student_by_id    
+        studentName = self.db.get_student_by_name     
+        print(colored("Showing all students:", "yellow"))
+        for student in students:
+            print(colored(f"Student ID: {studentID()}, Name: {studentName()}.", 'yellow'))
 
-    def remove_student(self,studentID):
-        #student.remove()
-        studentID = self.db.get_student()
-        for studentID in self.studentID:
-            if studentID.get_studentID() == studentID:
-                studentID.remove(studentID)
-                self.db.write_data(studentID)
-                print(f'Student with student ID {studentID} has been removed.')
-                return
-        print(f'Student with student ID {studentID} not found.')
+    def remove_student(self,student_id):
+        if self.db.remove_student(student_id):
+            print(colored(f"Removed student with ID {student_id} from the database.", "yellow"))
+        else:
+            print(colored(f"Student with ID {student_id} does not exist in the database.", "red"))
+
+        #Op2: 
+        # studentID = self.db.get_studentID()
+        # for studentID in self.studentID:
+        #     if studentID.get_studentID() == studentID:
+        #         studentID.remove(studentID)
+        #         self.db.write_data(studentID)
+        #         print(f'Student with student ID {studentID} has been removed.')
+        #         return
+        # print(f'Student with student ID {studentID} not found.')
     
     def partition(self,student):
         student = self.db.get_student()
         pass_student = []
         fail_student = []
         for student in student:
-            if student.calculate_average_mark() >= 50:
+            if SC.calculate_average_mark() >= 50:
                 pass_student.append(student)
             else:
                 fail_student.append(student)
-        print(f"Pass students: {len(pass_student)}")
-        print(f"Fail students: {len(fail_student)}")
+        print(f"Pass students: {pass_student}")
+        print(f"Fail students: {fail_student}")
     
     def group_student(self,student):
         student = self.db.get_student()
@@ -48,63 +73,41 @@ class AdminController:
         P_grade = []
         F_grade = [] 
         for student in student:
-            if student.calculate_average_mark() >= 85:
+            if SC.calculate_average_mark() >= 85:
                 HD_grade.append(student)
-            elif student.calculate_average_mark() >= 75 & student.calculate_average_mark() < 85 :
+            elif SC.calculate_average_mark() >= 75 & student.calculate_average_mark() < 85 :
                 D_grade.append(student)
-            elif student.calculate_average_mark() >= 65 & student.calculate_average_mark() < 75 :
+            elif SC.calculate_average_mark() >= 65 & student.calculate_average_mark() < 75 :
                 C_grade.append(student)
-            elif student.calculate_average_mark() >= 50 & student.calculate_average_mark() < 65 :
+            elif SC.calculate_average_mark() >= 50 & student.calculate_average_mark() < 65 :
                 P_grade.append(student) 
             else:
                 F_grade.append(student)
-        print(f"HD students: {len(HD_grade)}")
-        print(f"D students: {len(D_grade)}")
-        print(f"C students: {len(C_grade)}")
-        print(f"P students: {len(P_grade)}")
-        print(f"F students: {len(F_grade)}") 
+        # for student in student:
+        #     if Subject.get_grade() == 'HD':
+        #         HD_grade.append(student)
+        #     elif Subject.get_grade() == 'D':
+        #         D_grade.append(student)
+        #     elif Subject.get_grade() == 'C':
+        #         C_grade.append(student)
+        #     elif Subject.get_grade() == 'P':
+        #         P_grade.append(student) 
+        #     else:
+        #         F_grade.append(student)
+        # print(f"HD students: {len(HD_grade)}")
+        # print(f"D students: {len(D_grade)}")
+        # print(f"C students: {len(C_grade)}")
+        # print(f"P students: {len(P_grade)}")
+        # print(f"F students: {len(F_grade)}") 
   
 
     def clear_database(self):
-        self.db.clear_data()
-        print("Database has been cleared.")
+        self.db.clear()
+        print(colored("Cleared all student data.", "yellow"))
    
-    def read_choice(self):
-        print("Admin System (c/g/p/r/s/x): ", end="")
-        return input().strip().lower()
     
-    def use(self,admin):
-        print(f"{self.name} Admin system:")
-        choice = ''
-
-        while True:
-            choice = self.read_choice()
-            if choice == 'x':
-                break
-            elif choice == 's':
-                self.show_student(student)
-            elif choice == 'r':
-                self.remove_student(student)
-            elif choice == 'p':
-                self.partition(student)
-            elif choice == 'g':
-                self.group_student(student)
-            elif choice == 'c':
-                self.clear_database(student)
-            else:
-                self.help()
-        print("Back to University system")
-
-    def help(self):
-        print("Admin System")
-        print("Please choose an option:")
-        print("(c) Clear Database File")
-        print("(g) Group Students")
-        print("(p) Partition Students")
-        print("(r) Remove Student")
-        print("(s) Show Students")
-        print("(x) Exit")
 
 # Running the main function
 #student = Student()
 #student.main()
+
