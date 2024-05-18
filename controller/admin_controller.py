@@ -2,6 +2,7 @@
 #viewing, grouping, partitioning students, clearing database, remove student
 import re
 import os
+import sys
 from termcolor import colored 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from model.student import Student
