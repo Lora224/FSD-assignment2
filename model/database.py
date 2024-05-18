@@ -64,13 +64,9 @@ class Database:
     def get_student_by_id(self,studentID):
         df = pd.read_csv(self.path)
         student = df.loc[df['studentID'] == studentID].copy()
-        student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
-        return student
-    def get_student_by_name(self,name):
-        df = pd.read_csv(self.path)
-        student = df.loc[df['name'] == name].copy()
-        student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
-        return student    
+        student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)        
+        return studentID
+   
     def update_student_password(self,email,newPassword):
         df = pd.read_csv(self.path)
         df.loc[df['email'] == email, 'password'] = newPassword
