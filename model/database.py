@@ -8,6 +8,7 @@
 
 #verify student credentials?
 #update password?
+#update get_student_by_name
 
 #subject, student controllers etc intereact with student.data
 import pandas as pd
@@ -65,6 +66,11 @@ class Database:
         student = df.loc[df['studentID'] == studentID].copy()
         student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
         return student
+    def get_student_by_name(self,name):
+        df = pd.read_csv(self.path)
+        student = df.loc[df['name'] == name].copy()
+        student['parsed_subjects'] = student['subjects'].apply(self.parse_subjects)
+        return student    
     def update_student_password(self,email,newPassword):
         df = pd.read_csv(self.path)
         df.loc[df['email'] == email, 'password'] = newPassword
