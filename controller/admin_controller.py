@@ -10,6 +10,7 @@ from model.database import Database
 from model.subject import Subject
 from controller.student_controller import StudentController as SC
 
+
 # EMAIL_PATTERN = r'\b[A-Za-z]+@university\.com\b'
 # PASSWORD_PATTERN = r'\b[A-Z][A-Za-z]{5,}[0-9]{3,}\b'
 
@@ -26,16 +27,16 @@ class AdminController:
         self.db = Database()
 
     def show_student(self):        
-        print(colored("Showing all students:", "yellow"))               
+        print(colored("Student List", "yellow"))               
         for student in self.db.get_student():
-            print(colored(f"Student ID: {student[0]}, Name: {student[1]}, Mail: {student[2]}.", 'yellow'))
+            print(f"{student[1]} :: {student[0]} --> Email: {student[2]}")
     
 
     def remove_student(self,student_id):         
         if self.db.remove_student(student_id):
-            print(colored(f"Removed student with ID {student_id} from the database.", "yellow"))
+            print(colored(f"Removed Student {student_id} Account", "yellow"))
         else:
-            print(colored(f"Student with ID {student_id} does not exist in the database.", "red"))
+            print(colored(f"Student {student_id} does not exist", "red"))
 
         
     
@@ -45,11 +46,12 @@ class AdminController:
         fail_student = []
         for student in students:
             if SC.calculate_average_mark(student[-1]) >= 50:
-                pass_student.append(f'Student ID: {student[0]}, Name: {student[1]}.')
+                pass_student.append(f'{student[1]} :: {student[0]} --> MARK:{SC.calculate_average_mark(student[-1])}')
             else:
-                fail_student.append(f'Student ID: {student[0]}, Name: {student[1]}.')
-        print(colored(f"Pass students: {'\n'.join(pass_student)}",'yellow'))
-        print(colored(f"Fail students: {'\n'.join(fail_student)}",'yellow'))
+                fail_student.append(f'{student[1]} :: {student[0]} --> MARK:{SC.calculate_average_mark(student[-1])}')
+        print(colored('PASS/FAIL Partition', 'yellow'))
+        print(f"PASS --> {'\n'.join(pass_student)}")
+        print(f"FAIL --> {'\n'.join(fail_student)}")
     
     # # OP1
     # def group_student(self):
@@ -71,26 +73,35 @@ class AdminController:
         F_grade = [] 
         for student in students:  
             if SC.calculate_average_mark(student[-1]) >= 85:
-                HD_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
+                HD_grade.append(f'{student[1]} :: {student[0]} --> GRADE: HD - Mark: {SC.calculate_average_mark(student[-1])}.')
             elif SC.calculate_average_mark(student[-1]) < 85 and SC.calculate_average_mark(student[-1]) >= 75:
-                D_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
+                D_grade.append(f'{student[1]} :: {student[0]} --> GRADE: D - Mark: {SC.calculate_average_mark(student[-1])}.')
             elif SC.calculate_average_mark(student[-1]) < 75 and SC.calculate_average_mark(student[-1]) >= 65:
-                C_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
+                C_grade.append(f'{student[1]} :: {student[0]} --> GRADE: C - Mark: {SC.calculate_average_mark(student[-1])}.')
             elif SC.calculate_average_mark(student[-1]) < 65 and SC.calculate_average_mark(student[-1]) >= 50:
-                P_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.') 
+                P_grade.append(f'{student[1]} :: {student[0]} --> GRADE: P - Mark: {SC.calculate_average_mark(student[-1])}.')
             else:
-                F_grade.append(f'Student ID: {student[0]}, Name: {student[1]}, Mark: {SC.calculate_average_mark(student[-1])}.')
+                F_grade.append(f'{student[1]} :: {student[0]} --> GRADE: F - Mark: {SC.calculate_average_mark(student[-1])}.')
        
-        print(colored(f"HD students: {'\n'.join(HD_grade)}",'yellow'))
-        print(colored(f"D students: {'\n'.join(D_grade)}",'yellow'))
-        print(colored(f"C students: {'\n'.join(C_grade)}",'yellow'))
-        print(colored(f"P students: {'\n'.join(P_grade)}",'yellow'))
-        print(colored(f"F students: {'\n'.join(F_grade)}",'yellow')) 
+        print(colored("Grade Grouping", "yellow"))
+        print(f'HD --> {'\n'.join(HD_grade)}')
+        print(f"D --> {'\n'.join(D_grade)}")
+        print(f"C --> {'\n'.join(C_grade)}")
+        print(f"P --> {'\n'.join(P_grade)}")
+        print(f"F --> {'\n'.join(F_grade)}") 
   
 
-    def clear_database(self):
-        self.db.clear()
-        print(colored("Cleared all student data.", "yellow"))
+    def clear_database(self,choice):        
+        while True:
+            choice = str(input(colored('Are you sure you want to clear the database (Y)ES/ (N)O: ', 'red')).upper())
+            if choice == 'N':
+                break                  
+            elif choice == 'Y':
+                self.db.clear()
+                print(colored("Student data cleared", "yellow"))
+            else:
+                print("Invalid choice. Please try again.")
+            
    
     
 
