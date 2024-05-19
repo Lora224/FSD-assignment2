@@ -30,7 +30,9 @@ class Database:
             return file.readlines()
         
     def clear(self):
-        open(self.path, "w")
+        df = pd.read_csv(self.path)
+        df.drop(df.index, inplace=True)
+        df.to_csv(self.path, index=False)
         
     def remove_student(self,studentID):
         df = pd.read_csv(self.path)
@@ -85,6 +87,9 @@ class Database:
 
 # if __name__ == "__main__":
 #   db=Database()
+#   print (db.get_student())
+#   db.clear()
+#   print (db.get_student())
 
 #   #print (df.columns)          #giving double output?
 #   print('get student by email') #working
