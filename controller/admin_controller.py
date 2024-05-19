@@ -50,8 +50,9 @@ class AdminController:
             else:
                 fail_student.append(f'{student[1]} :: {student[0]} --> MARK:{SC.calculate_average_mark(student[-1])}')
         print(colored('PASS/FAIL Partition', 'yellow'))
-        print(f"PASS --> {'\n'.join(pass_student)}")
         print(f"FAIL --> {'\n'.join(fail_student)}")
+        print(f"PASS --> {'\n'.join(pass_student)}")
+        
     
     # # OP1
     # def group_student(self):
