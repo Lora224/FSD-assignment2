@@ -39,7 +39,7 @@ class StudentController:
         s = Subject(111,0,'')             #create a new subject object
         s.get_subjectID()
         s.get_mark()
-        s.grade = s.get_grade()
+        s.grade = s.get_grade(int(s.mark))
         data = [s.subject_ID,s.mark,s.grade] 
         subjects.append(data)
         print(colored(f'Enrolling in Subject - {s.subject_ID}',"yellow"))

@@ -97,8 +97,7 @@ def student_course_system(student,subjects):
             confirm_password = input("Confirm Password: ")
             sc.update_password(student.email,new_password,confirm_password)
       elif student_choice == 'X':
-            if(sc.subject_count(subjects)):
-               db.update_student_subjects(student.email,subjects)
+            db.update_student_subjects(student.email,subjects)
             break
        
 def admin_system():

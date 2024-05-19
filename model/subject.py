@@ -18,14 +18,14 @@ class Subject:
     def get_mark(self):        
         self.mark = rd.randint(25,100)
         return self.mark
-    def get_grade(self):
-        if self.mark >= 85:
+    def get_grade(self,mark):
+        if mark >= 85:
             return "HD"
-        elif self.mark >= 75 & self.mark < 85:
+        elif mark >= 75 and mark < 85:
             return "D"
-        elif self.mark >= 65 & self.mark < 75:
+        elif mark >= 65 and mark < 75:
             return "C"
-        elif self.mark >= 50 & self.mark < 65:
+        elif mark >= 50 and mark < 65:
             return "P"
         else:
             return "F"
@@ -36,7 +36,10 @@ class Subject:
         #print("subject.py Subject ID: ",randnum.zfill(3))
         return self.subject_ID
 
-
+# if __name__ == "__main__":
+#     s = Subject("1",90,"HD")
+#     x= int(input("Enter mark: "))
+#     print(s.get_grade(x))
 
 #s = Subject()
 #print(s)

@@ -19,6 +19,7 @@ class Database:
         self.path = 'student.csv'
         if not os.path.isfile(self.path):
             with open(self.path, "x") as file:
+                file.write("studentID,name,email,password,subjects\n")
                 pass
 
     def write(self, data):
@@ -75,6 +76,10 @@ class Database:
         df.to_csv(self.path, index=False)     
     def update_student_subjects(self,email,subjects):
         df = pd.read_csv(self.path)
+        if len(subjects) == 0:
+            df.loc[df['email'] == email, 'subjects'] = ' '
+            df.to_csv(self.path, index=False)
+            return
         s =''
         for subject in subjects:
             subject_str = f'{subject[0]}:{subject[1]}:{subject[2]}'

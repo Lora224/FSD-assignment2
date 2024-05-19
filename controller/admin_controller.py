@@ -27,8 +27,12 @@ class AdminController:
         self.db = Database()
 
     def show_student(self):        
-        print(colored("Student List", "yellow"))               
-        for student in self.db.get_student():
+        print(colored("Student List", "yellow"))  
+        students = self.db.get_student() 
+        if not students:
+            print("<Nothing to display>")
+            return            
+        for student in students:
             print(f"{student[1]} :: {student[0]} --> Email: {student[2]}")
     
 
@@ -50,8 +54,8 @@ class AdminController:
             else:
                 fail_student.append(f'{student[1]} :: {student[0]} --> MARK:{SC.calculate_average_mark(student[-1])}')
         print(colored('PASS/FAIL Partition', 'yellow'))
-        print(f"FAIL --> {'\n'.join(fail_student)}")
-        print(f"PASS --> {'\n'.join(pass_student)}")
+        print(f"FAIL --> [{'\n'.join(fail_student)}]")
+        print(f"PASS --> [{'\n'.join(pass_student)}]")
         
     
     # # OP1
@@ -67,6 +71,7 @@ class AdminController:
 
     def group_student(self):
         students = self.db.get_student()
+
         HD_grade = []
         D_grade = []
         C_grade = []
@@ -74,17 +79,20 @@ class AdminController:
         F_grade = [] 
         for student in students:  
             if SC.calculate_average_mark(student[-1]) >= 85:
-                HD_grade.append(f'{student[1]} :: {student[0]} --> GRADE: HD - Mark: {SC.calculate_average_mark(student[-1])}.')
+                HD_grade.append(f'{student[1]} :: {student[0]} --> GRADE: HD - Mark: {SC.calculate_average_mark(student[-1])}')
             elif SC.calculate_average_mark(student[-1]) < 85 and SC.calculate_average_mark(student[-1]) >= 75:
-                D_grade.append(f'{student[1]} :: {student[0]} --> GRADE: D - Mark: {SC.calculate_average_mark(student[-1])}.')
+                D_grade.append(f'{student[1]} :: {student[0]} --> GRADE: D - Mark: {SC.calculate_average_mark(student[-1])}')
             elif SC.calculate_average_mark(student[-1]) < 75 and SC.calculate_average_mark(student[-1]) >= 65:
-                C_grade.append(f'{student[1]} :: {student[0]} --> GRADE: C - Mark: {SC.calculate_average_mark(student[-1])}.')
+                C_grade.append(f'{student[1]} :: {student[0]} --> GRADE: C - Mark: {SC.calculate_average_mark(student[-1])}')
             elif SC.calculate_average_mark(student[-1]) < 65 and SC.calculate_average_mark(student[-1]) >= 50:
-                P_grade.append(f'{student[1]} :: {student[0]} --> GRADE: P - Mark: {SC.calculate_average_mark(student[-1])}.')
+                P_grade.append(f'{student[1]} :: {student[0]} --> GRADE: P - Mark: {SC.calculate_average_mark(student[-1])}')
             else:
-                F_grade.append(f'{student[1]} :: {student[0]} --> GRADE: F - Mark: {SC.calculate_average_mark(student[-1])}.')
+                F_grade.append(f'{student[1]} :: {student[0]} --> GRADE: F - Mark: {SC.calculate_average_mark(student[-1])}')
        
         print(colored("Grade Grouping", "yellow"))
+        if not students:
+            print("<Nothing to display>")
+            return
         print(f'HD --> {'\n'.join(HD_grade)}')
         print(f"D --> {'\n'.join(D_grade)}")
         print(f"C --> {'\n'.join(C_grade)}")
@@ -100,8 +108,10 @@ class AdminController:
             elif choice == 'Y':
                 self.db.clear()
                 print(colored("Student data cleared", "yellow"))
+                break
             else:
                 print("Invalid choice. Please try again.")
+            
             
    
     
